@@ -266,9 +266,15 @@ class WeatherApp {
     populatePrefectureSelect() {
         const prefectureSelect = document.getElementById('prefectureSelect');
         
-        // 都道府県リストを作成
-        const prefectures = [...new Set(this.stations.map(station => station.prefecture))];
-        prefectures.sort();
+        // 都道府県リストをCSV登場順で作成（重複除去しつつ順序維持）
+        const prefectures = [];
+        const seen = new Set();
+        this.stations.forEach(station => {
+            if (!seen.has(station.prefecture)) {
+                prefectures.push(station.prefecture);
+                seen.add(station.prefecture);
+            }
+        });
         
         prefectureSelect.innerHTML = '<option value="">都道府県を選択してください</option>';
         prefectures.forEach(prefecture => {
