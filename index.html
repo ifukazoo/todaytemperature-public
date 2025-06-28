@@ -275,12 +275,15 @@
             font-size: 1.1rem;
         }
         
+        .prefecture-select-container,
         .station-select-container {
             position: relative;
             display: inline-block;
             min-width: 320px;
+            margin-bottom: 16px;
         }
         
+        #prefectureSelect,
         #stationSelect {
             padding: 16px 50px 16px 20px;
             font-size: 16px;
@@ -298,6 +301,14 @@
             -moz-appearance: none;
         }
         
+        #stationSelect:disabled {
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+            color: #999;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        
+        .prefecture-select-container::after,
         .station-select-container::after {
             content: '';
             position: absolute;
@@ -313,6 +324,17 @@
             transition: all 0.3s ease;
         }
         
+        .prefecture-select-container::before {
+            content: '🏞️';
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
         .station-select-container::before {
             content: '🌡️';
             position: absolute;
@@ -324,10 +346,12 @@
             z-index: 1;
         }
         
+        #prefectureSelect,
         #stationSelect {
             padding-left: 50px;
         }
         
+        #prefectureSelect:focus,
         #stationSelect:focus {
             outline: none;
             border-color: #2ab0f0;
@@ -336,13 +360,15 @@
             transform: translateY(-2px);
         }
         
-        #stationSelect:hover {
+        #prefectureSelect:hover,
+        #stationSelect:hover:not(:disabled) {
             border-color: #2ab0f0;
             background: linear-gradient(135deg, #ffffff 0%, #f0f8ff 100%);
             box-shadow: 0 5px 16px rgba(42, 176, 240, 0.2);
             transform: translateY(-1px);
         }
         
+        .prefecture-select-container:hover::after,
         .station-select-container:hover::after {
             border-top-color: #005baa;
             transform: translateY(-50%) scale(1.1);
@@ -491,12 +517,22 @@
     <div class="container">
         <div class="main-content">
             <div class="station-selector">
-                <label for="stationSelect">観測所を選択：</label>
+                <label>観測所を選択：</label>
+                
+                <!-- 都道府県選択 -->
+                <div class="prefecture-select-container">
+                    <select id="prefectureSelect">
+                        <option value="">都道府県を選択してください</option>
+                    </select>
+                </div>
+                
+                <!-- 観測所選択 -->
                 <div class="station-select-container">
-                    <select id="stationSelect">
+                    <select id="stationSelect" disabled>
                         <option value="">観測所を選択してください</option>
                     </select>
                 </div>
+                
                 <div id="stationInfo" class="station-info"></div>
             </div>
             

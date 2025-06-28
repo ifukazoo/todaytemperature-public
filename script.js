@@ -67,6 +67,11 @@ class WeatherApp {
             this.fetchWeatherData();
         });
         
+        // 都道府県選択時の処理
+        document.getElementById('prefectureSelect').addEventListener('change', () => {
+            this.onPrefectureChange();
+        });
+        
         // 観測所選択時の自動更新
         document.getElementById('stationSelect').addEventListener('change', () => {
             this.onStationChange();
@@ -254,43 +259,74 @@ class WeatherApp {
     }
 
     populateStationSelect() {
-        const select = document.getElementById('stationSelect');
-        console.log('Populating select with', this.stations.length, 'stations');
+        this.populatePrefectureSelect();
+        console.log('Station data loaded:', this.stations.length, 'stations');
+    }
+
+    populatePrefectureSelect() {
+        const prefectureSelect = document.getElementById('prefectureSelect');
         
-        select.innerHTML = '<option value="">観測所を選択してください</option>';
+        // 都道府県リストを作成
+        const prefectures = [...new Set(this.stations.map(station => station.prefecture))];
+        prefectures.sort();
         
-        // 県別にグループ化
-        const prefectureGroups = {};
-        this.stations.forEach(station => {
-            const prefecture = station.prefecture;
-            if (!prefectureGroups[prefecture]) {
-                prefectureGroups[prefecture] = [];
-            }
-            prefectureGroups[prefecture].push(station);
+        prefectureSelect.innerHTML = '<option value="">都道府県を選択してください</option>';
+        prefectures.forEach(prefecture => {
+            const option = document.createElement('option');
+            option.value = prefecture;
+            option.textContent = prefecture;
+            prefectureSelect.appendChild(option);
         });
         
-        // 県別にoptgroupを作成
-        Object.keys(prefectureGroups).sort().forEach(prefecture => {
-            const optgroup = document.createElement('optgroup');
-            optgroup.label = prefecture;
-            
-            prefectureGroups[prefecture]
-                .sort((a, b) => a.originalName.localeCompare(b.originalName, 'ja'))
-                .forEach(station => {
-                    const option = document.createElement('option');
-                    option.value = station.id;
-                    option.textContent = `${station.originalName} (${station.type})`;
-                    option.dataset.prefecture = station.prefecture;
-                    option.dataset.type = station.type;
-                    optgroup.appendChild(option);
-                });
-            
-            select.appendChild(optgroup);
-        });
+        // デフォルトで長野県を選択（観測所ID 48361がある県）
+        const naganoStation = this.stations.find(station => station.id === '48361');
+        if (naganoStation) {
+            prefectureSelect.value = naganoStation.prefecture;
+            this.populateStationSelectForPrefecture(naganoStation.prefecture);
+            document.getElementById('stationSelect').value = '48361';
+            this.updateStationInfo();
+        }
         
-        select.value = '48361';
-        this.updateStationInfo();
-        console.log('Select populated, selected value:', select.value);
+        console.log('Prefecture select populated with', prefectures.length, 'prefectures');
+    }
+
+    populateStationSelectForPrefecture(selectedPrefecture) {
+        const stationSelect = document.getElementById('stationSelect');
+        
+        if (!selectedPrefecture) {
+            stationSelect.innerHTML = '<option value="">観測所を選択してください</option>';
+            stationSelect.disabled = true;
+            return;
+        }
+        
+        const stationsInPrefecture = this.stations.filter(station => 
+            station.prefecture === selectedPrefecture
+        );
+        
+        stationSelect.innerHTML = '<option value="">観測所を選択してください</option>';
+        
+        stationsInPrefecture
+            .sort((a, b) => a.originalName.localeCompare(b.originalName, 'ja'))
+            .forEach(station => {
+                const option = document.createElement('option');
+                option.value = station.id;
+                option.textContent = `${station.originalName} (${station.type})`;
+                option.dataset.prefecture = station.prefecture;
+                option.dataset.type = station.type;
+                stationSelect.appendChild(option);
+            });
+        
+        stationSelect.disabled = false;
+        console.log(`Station select populated with ${stationsInPrefecture.length} stations for ${selectedPrefecture}`);
+    }
+
+    onPrefectureChange() {
+        const selectedPrefecture = document.getElementById('prefectureSelect').value;
+        this.populateStationSelectForPrefecture(selectedPrefecture);
+        
+        // 観測所選択をリセット
+        document.getElementById('stationSelect').value = '';
+        document.getElementById('stationInfo').innerHTML = '';
     }
 
     getSelectedStationId() {
