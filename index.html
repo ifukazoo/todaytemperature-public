@@ -374,31 +374,6 @@
             transform: translateY(-50%) scale(1.1);
         }
         
-        .station-info {
-            margin-top: 12px;
-            font-size: 0.9rem;
-            color: #7f8c8d;
-            font-style: italic;
-            min-height: 20px;
-        }
-        
-        .selected-station-info {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: linear-gradient(135deg, #e6f3ff 0%, #f0f8ff 100%);
-            padding: 8px 16px;
-            border-radius: 8px;
-            margin-top: 8px;
-            border: 1px solid rgba(42, 176, 240, 0.2);
-            color: #2c3e50;
-            font-weight: 500;
-        }
-        
-        .selected-station-info::before {
-            content: '📍';
-            font-size: 14px;
-        }
         
         /* レスポンシブデザイン */
         @media (min-width: 1024px) {
@@ -532,8 +507,6 @@
                         <option value="">観測所を選択してください</option>
                     </select>
                 </div>
-                
-                <div id="stationInfo" class="station-info"></div>
             </div>
             
             <div class="button-container">

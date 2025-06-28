@@ -75,7 +75,6 @@ class WeatherApp {
         // 観測所選択時の自動更新
         document.getElementById('stationSelect').addEventListener('change', () => {
             this.onStationChange();
-            this.updateStationInfo();
         });
         
         this.initCharts();
@@ -290,7 +289,6 @@ class WeatherApp {
             prefectureSelect.value = naganoStation.prefecture;
             this.populateStationSelectForPrefecture(naganoStation.prefecture);
             document.getElementById('stationSelect').value = '48361';
-            this.updateStationInfo();
         }
         
         console.log('Prefecture select populated with', prefectures.length, 'prefectures');
@@ -332,7 +330,6 @@ class WeatherApp {
         
         // 観測所選択をリセット
         document.getElementById('stationSelect').value = '';
-        document.getElementById('stationInfo').innerHTML = '';
     }
 
     getSelectedStationId() {
@@ -340,27 +337,6 @@ class WeatherApp {
         return select.value;
     }
     
-    updateStationInfo() {
-        const selectedStationId = this.getSelectedStationId();
-        const stationInfo = document.getElementById('stationInfo');
-        
-        if (!selectedStationId) {
-            stationInfo.innerHTML = '';
-            return;
-        }
-        
-        const selectedStation = this.stations.find(station => station.id === selectedStationId);
-        if (selectedStation) {
-            stationInfo.innerHTML = `
-                <div class="selected-station-info">
-                    ${selectedStation.prefecture} ${selectedStation.originalName}
-                    <span style="margin-left: 8px; padding: 2px 8px; background: rgba(42, 176, 240, 0.1); border-radius: 4px; font-size: 0.8rem;">
-                        ${selectedStation.type === '四' ? '四要素' : selectedStation.type === '官' ? '官署' : selectedStation.type}
-                    </span>
-                </div>
-            `;
-        }
-    }
 
     async onStationChange() {
         const selectedStationId = this.getSelectedStationId();
