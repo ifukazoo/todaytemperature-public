@@ -63,7 +63,8 @@ class WeatherApp {
     }
 
     async init() {
-        document.getElementById('fetchButton').addEventListener('click', () => {
+        // リフレッシュボタンのイベントリスナー
+        document.getElementById('refreshCharts').addEventListener('click', () => {
             this.fetchWeatherData();
         });
         
@@ -72,9 +73,9 @@ class WeatherApp {
             this.onPrefectureChange();
         });
         
-        // 観測所選択時の自動更新
+        // 観測所選択時の自動データ取得
         document.getElementById('stationSelect').addEventListener('change', () => {
-            this.onStationChange();
+            this.onStationChangeWithAutoFetch();
         });
         
         this.initCharts();
@@ -289,6 +290,9 @@ class WeatherApp {
             prefectureSelect.value = naganoStation.prefecture;
             this.populateStationSelectForPrefecture(naganoStation.prefecture);
             document.getElementById('stationSelect').value = '48361';
+            
+            // 初回ロード時にデフォルト観測所のデータを自動取得
+            this.fetchWeatherDataOnLoad();
         }
         
         console.log('Prefecture select populated with', prefectures.length, 'prefectures');
@@ -357,6 +361,31 @@ class WeatherApp {
         }
     }
 
+    async onStationChangeWithAutoFetch() {
+        const selectedStationId = this.getSelectedStationId();
+        
+        if (!selectedStationId) {
+            return;
+        }
+        
+        // まずキャッシュがあるかチェックして即座に表示
+        if (this.hasCachedData()) {
+            console.log('Using cached data for station change');
+            try {
+                const weatherData = await this.getTodayWeatherDataFromCache(selectedStationId);
+                this.updateCharts(weatherData, selectedStationId);
+            } catch (error) {
+                console.warn('Failed to use cached data:', error);
+            }
+        }
+        
+        // キャッシュがない場合は自動でデータを取得
+        if (!this.hasCachedData()) {
+            console.log('No cached data, auto-fetching weather data');
+            await this.fetchWeatherData();
+        }
+    }
+
     hasCachedData() {
         const today = new Date();
         const year = today.getFullYear();
@@ -379,7 +408,7 @@ class WeatherApp {
     }
 
     async fetchWeatherData() {
-        const button = document.getElementById('fetchButton');
+        const refreshButton = document.getElementById('refreshCharts');
         const loading = document.getElementById('loading');
         const error = document.getElementById('error');
         const selectedStationId = this.getSelectedStationId();
@@ -390,7 +419,8 @@ class WeatherApp {
             return;
         }
         
-        button.disabled = true;
+        // リフレッシュボタンを無効化
+        if (refreshButton) refreshButton.disabled = true;
         loading.style.display = 'block';
         error.style.display = 'none';
         
@@ -406,7 +436,8 @@ class WeatherApp {
             error.textContent = 'データの取得に失敗しました。しばらく待ってから再試行してください。';
             error.style.display = 'block';
         } finally {
-            button.disabled = false;
+            // リフレッシュボタンを再有効化
+            if (refreshButton) refreshButton.disabled = false;
             loading.style.display = 'none';
         }
     }
@@ -555,6 +586,15 @@ class WeatherApp {
         this.pressureChart.data.datasets[0].data = pressures;
         this.pressureChart.options.plugins.title.text = `${stationName} - 今日の気圧変化`;
         this.pressureChart.update();
+    }
+
+    async fetchWeatherDataOnLoad() {
+        console.log('Auto-fetching weather data on initial load');
+        try {
+            await this.fetchWeatherData();
+        } catch (error) {
+            console.warn('Failed to auto-fetch weather data on load:', error);
+        }
     }
 }
 
