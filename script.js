@@ -56,6 +56,7 @@ class WeatherApp {
     constructor() {
         this.temperatureChart = null;
         this.pressureChart = null;
+        this.humidityChart = null;
         this.stations = [];
         this.dataCache = new WeatherDataCache();
 
@@ -85,6 +86,7 @@ class WeatherApp {
     initCharts() {
         this.initTemperatureChart();
         this.initPressureChart();
+        this.initHumidityChart();
     }
 
     initTemperatureChart() {
@@ -173,6 +175,55 @@ class WeatherApp {
                     title: {
                         display: true,
                         text: '今日の気圧変化'
+                    },
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    }
+                }
+            }
+        });
+    }
+
+    initHumidityChart() {
+        const ctx = document.getElementById('humidityChart').getContext('2d');
+        this.humidityChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: '湿度 (%)',
+                    data: [],
+                    borderColor: 'rgba(116, 185, 255, 1)',
+                    backgroundColor: 'rgba(116, 185, 255, 0.2)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: '湿度 (%)'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: '時刻'
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: '今日の湿度変化'
                     },
                     legend: {
                         display: true,
@@ -489,14 +540,16 @@ class WeatherApp {
                     weatherData.push({
                         time: `${hour.toString().padStart(2, '0')}:00`,
                         temperature: data.temperature,
-                        pressure: data.pressure
+                        pressure: data.pressure,
+                        humidity: data.humidity
                     });
                 } catch (error) {
                     console.warn(`Failed to get cached data for hour ${hour}:`, error);
                     weatherData.push({
                         time: `${hour.toString().padStart(2, '0')}:00`,
                         temperature: null,
-                        pressure: null
+                        pressure: null,
+                        humidity: null
                     });
                 }
             } else {
@@ -504,7 +557,8 @@ class WeatherApp {
                 weatherData.push({
                     time: `${hour.toString().padStart(2, '0')}:00`,
                     temperature: null,
-                    pressure: null
+                    pressure: null,
+                    humidity: null
                 });
             }
         }
@@ -562,7 +616,8 @@ class WeatherApp {
             const stationData = allStationsData[stationId];
             return {
                 temperature: stationData.temp ? stationData.temp[0] : null,
-                pressure: stationData.pressure ? stationData.pressure[0] : null
+                pressure: stationData.pressure ? stationData.pressure[0] : null,
+                humidity: stationData.humidity ? stationData.humidity[0] : null
             };
         } else {
             throw new Error(`No weather data found for station ${stationId}`);
@@ -573,6 +628,7 @@ class WeatherApp {
         const labels = weatherData.map(data => data.time);
         const temperatures = weatherData.map(data => data.temperature);
         const pressures = weatherData.map(data => data.pressure);
+        const humidities = weatherData.map(data => data.humidity);
 
         const selectedStation = this.stations.find(station => station.id === stationId);
         const stationName = selectedStation ? selectedStation.name : `観測所${stationId}`;
@@ -586,6 +642,11 @@ class WeatherApp {
         this.pressureChart.data.datasets[0].data = pressures;
         this.pressureChart.options.plugins.title.text = `${stationName} - 今日の気圧変化`;
         this.pressureChart.update();
+
+        this.humidityChart.data.labels = labels;
+        this.humidityChart.data.datasets[0].data = humidities;
+        this.humidityChart.options.plugins.title.text = `${stationName} - 今日の湿度変化`;
+        this.humidityChart.update();
     }
 
     async fetchWeatherDataOnLoad() {
