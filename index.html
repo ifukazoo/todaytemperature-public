@@ -237,6 +237,11 @@
             color: white;
         }
         
+        .chart-icon.humidity {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            color: white;
+        }
+        
         .chart-meta {
             font-size: 0.875rem;
             color: #7f8c8d;
@@ -377,7 +382,7 @@
         /* レスポンシブデザイン */
         @media (min-width: 1024px) {
             .charts-grid {
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: 1fr 1fr 1fr;
             }
         }
         
@@ -533,6 +538,19 @@
                         </div>
                         <div class="chart-container">
                             <canvas id="temperatureChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3 class="chart-title">
+                                <div class="chart-icon humidity">💧</div>
+                                湿度変化
+                            </h3>
+                            <div class="chart-meta">単位: %</div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="humidityChart"></canvas>
                         </div>
                     </div>
                     
