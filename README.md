@@ -63,6 +63,11 @@ open http://localhost:8000
 │   ├── charts.js           # Chart.js可視化管理
 │   ├── stations.js         # 観測所データ管理
 │   └── api.js              # 気象庁API連携
+├── css/                    # 責任分離されたスタイルシート
+│   ├── base.css            # ベーススタイル・レイアウト
+│   ├── stations.css        # 観測所選択UI
+│   ├── charts.css          # チャート関連スタイル
+│   └── responsive.css      # レスポンシブデザイン
 ├── ame_master_20250313.csv # 観測所マスターデータ
 ├── CLAUDE.md               # 開発ガイド
 └── README.md               # このファイル
@@ -163,3 +168,4 @@ GET https://www.jma.go.jp/bosai/amedas/data/map/{timestamp}.json
 - v1.5.0: 気温データのない観測所除外
 - v1.6.0: 湿度表示機能追加（気温→湿度→気圧の3要素表示）
 - v2.0.0: ES6 modulesによるコード分割とアーキテクチャ改善
+- v2.1.0: CSS分割による保守性向上（責任分離設計）

@@ -1,0 +1,160 @@
+/**
+ * チャート関連スタイル
+ * チャートグリッド、カード、ヘッダー、リフレッシュボタン
+ */
+
+/* チャートセクション */
+.charts-section {
+    margin-top: 30px;
+}
+
+.charts-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e1e8ed;
+}
+
+.charts-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* リフレッシュボタン */
+.charts-refresh-button {
+    background: linear-gradient(135deg, rgba(42, 176, 240, 0.08) 0%, rgba(42, 176, 240, 0.03) 100%);
+    border: 1px solid rgba(42, 176, 240, 0.25);
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #2ab0f0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 1px 6px rgba(42, 176, 240, 0.08);
+}
+
+.charts-refresh-button:hover {
+    background: linear-gradient(135deg, rgba(42, 176, 240, 0.12) 0%, rgba(42, 176, 240, 0.06) 100%);
+    border-color: rgba(42, 176, 240, 0.4);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 12px rgba(42, 176, 240, 0.15);
+}
+
+.charts-refresh-button:active {
+    transform: translateY(0);
+    background: linear-gradient(135deg, rgba(42, 176, 240, 0.15) 0%, rgba(42, 176, 240, 0.08) 100%);
+}
+
+.charts-refresh-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    background: linear-gradient(135deg, rgba(189, 195, 199, 0.08) 0%, rgba(189, 195, 199, 0.03) 100%);
+    color: #bdc3c7;
+    border-color: rgba(189, 195, 199, 0.25);
+}
+
+/* チャートグリッド */
+.charts-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+    margin-top: 30px;
+}
+
+/* チャートカード */
+.chart-card {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    border: 1px solid rgba(0,0,0,0.05);
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.chart-card:hover {
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+    transform: translateY(-2px);
+}
+
+.chart-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(135deg, #005baa 0%, #2ab0f0 100%);
+}
+
+/* チャートヘッダー */
+.chart-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #edf2f9;
+}
+
+.chart-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* チャートアイコン */
+.chart-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+.chart-icon.temperature {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
+    color: white;
+}
+
+.chart-icon.humidity {
+    background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+    color: white;
+}
+
+.chart-icon.pressure {
+    background: linear-gradient(135deg, #4ecdc4 0%, #6ee7de 100%);
+    color: white;
+}
+
+.chart-meta {
+    font-size: 0.875rem;
+    color: #7f8c8d;
+    font-weight: 500;
+}
+
+/* チャートコンテナ */
+.chart-container {
+    position: relative;
+    height: 400px;
+    width: 100%;
+}
