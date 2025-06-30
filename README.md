@@ -36,7 +36,8 @@ open http://localhost:8000
 
 ### アーキテクチャ
 
-- **フロントエンドのみ**: HTML + JavaScript（ES6）
+- **フロントエンドのみ**: HTML + JavaScript（ES6 modules）
+- **モジュール設計**: 責任分離による5つのクラス構成
 - **チャートライブラリ**: Chart.js（CDN）
 - **データソース**: 気象庁アメダスAPI
 
@@ -56,7 +57,17 @@ open http://localhost:8000
 
 ```text
 ├── index.html              # メインHTMLファイル
-├── script.js               # JavaScriptアプリケーション
+├── js/                     # モジュール化されたJavaScript
+│   ├── app.js              # メインアプリケーション
+│   ├── cache.js            # TTLキャッシュシステム
+│   ├── charts.js           # Chart.js可視化管理
+│   ├── stations.js         # 観測所データ管理
+│   └── api.js              # 気象庁API連携
+├── css/                    # 責任分離されたスタイルシート
+│   ├── base.css            # ベーススタイル・レイアウト
+│   ├── stations.css        # 観測所選択UI
+│   ├── charts.css          # チャート関連スタイル
+│   └── responsive.css      # レスポンシブデザイン
 ├── ame_master_20250313.csv # 観測所マスターデータ
 ├── CLAUDE.md               # 開発ガイド
 └── README.md               # このファイル
@@ -103,17 +114,27 @@ GET https://www.jma.go.jp/bosai/amedas/data/map/{timestamp}.json
 
 ## 主要クラス
 
-### WeatherDataCache
+### 主要クラス構成
 
-- TTL（Time To Live）ベースのキャッシュシステム
-- 10分間の自動無効化
-- メモリ効率的な管理
+#### WeatherApp
+- ES6 modulesによる統合管理
+- イベントハンドリングとライフサイクル制御
 
-### WeatherApp
+#### WeatherDataCache
+- TTL（10分）ベースのキャッシュシステム
+- 自動無効化とメモリ効率管理
 
-- アプリケーション全体のライフサイクル管理
-- 観測所データの読み込み・管理
-- チャート表示・更新処理
+#### WeatherCharts
+- Chart.js による3要素チャート管理
+- 気温・湿度・気圧の可視化
+
+#### StationManager
+- CSV観測所データの読み込み・パース
+- 2段階選択UI（都道府県→観測所）
+
+#### WeatherAPI
+- 気象庁API連携とバッチ処理
+- プログレス表示とエラーハンドリング
 
 ## ブラウザサポート
 
@@ -146,3 +167,5 @@ GET https://www.jma.go.jp/bosai/amedas/data/map/{timestamp}.json
 - v1.4.0: 現在時刻までのデータ取得最適化
 - v1.5.0: 気温データのない観測所除外
 - v1.6.0: 湿度表示機能追加（気温→湿度→気圧の3要素表示）
+- v2.0.0: ES6 modulesによるコード分割とアーキテクチャ改善
+- v2.1.0: CSS分割による保守性向上（責任分離設計）

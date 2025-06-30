@@ -1,0 +1,96 @@
+/**
+ * レスポンシブデザイン
+ * デスクトップ・タブレット・モバイル対応
+ */
+
+/* デスクトップ（1024px以上）*/
+@media (min-width: 1024px) {
+    .charts-grid {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+/* タブレット（768px以下）*/
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2.5rem;
+    }
+    
+    .hero-section {
+        padding: 40px 20px;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+    
+    .main-content {
+        padding: 30px 20px;
+        margin: -20px 10px 0 10px;
+    }
+    
+    .chart-card {
+        padding: 20px;
+    }
+    
+    .chart-container {
+        height: 350px;
+    }
+    
+    .charts-grid {
+        gap: 20px;
+    }
+}
+
+/* モバイル（480px以下）*/
+@media (max-width: 480px) {
+    h1 {
+        font-size: 2rem;
+    }
+    
+    .hero-subtitle br {
+        display: none;
+    }
+    
+    /* 観測所選択UI調整 */
+    .prefecture-select-container,
+    .station-select-container {
+        min-width: 280px;
+    }
+    
+    #prefectureSelect,
+    #stationSelect {
+        font-size: 15px;
+        padding: 14px 45px 14px 45px;
+    }
+    
+    .prefecture-select-container::before,
+    .station-select-container::before {
+        font-size: 16px;
+        left: 14px;
+    }
+    
+    .prefecture-select-container::after,
+    .station-select-container::after {
+        right: 14px;
+    }
+    
+    /* チャート調整 */
+    .chart-card {
+        padding: 15px;
+    }
+    
+    .chart-container {
+        height: 300px;
+    }
+    
+    .chart-title {
+        font-size: 1.1rem;
+    }
+    
+    .chart-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+}

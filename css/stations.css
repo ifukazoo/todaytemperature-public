@@ -1,0 +1,120 @@
+/**
+ * 観測所選択UI関連スタイル
+ * 都道府県・観測所の2段階選択UI
+ */
+
+/* 観測所選択セクション */
+.station-selector {
+    text-align: center;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.station-selector label {
+    display: block;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 16px;
+    font-size: 1.1rem;
+}
+
+/* 選択コンテナ */
+.prefecture-select-container,
+.station-select-container {
+    position: relative;
+    display: inline-block;
+    min-width: 320px;
+    margin-bottom: 16px;
+}
+
+/* セレクトボックス共通スタイル */
+#prefectureSelect,
+#stationSelect {
+    padding: 16px 50px 16px 50px;
+    font-size: 16px;
+    border: 2px solid #e1e8ed;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
+    color: #2c3e50;
+    width: 100%;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    font-weight: 500;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+/* 無効状態 */
+#stationSelect:disabled {
+    background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+    color: #999;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* ドロップダウン矢印 */
+.prefecture-select-container::after,
+.station-select-container::after {
+    content: '';
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 8px solid #2ab0f0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+/* アイコン */
+.prefecture-select-container::before {
+    content: '🏞️';
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.station-select-container::before {
+    content: '🌡️';
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* フォーカス状態 */
+#prefectureSelect:focus,
+#stationSelect:focus {
+    outline: none;
+    border-color: #2ab0f0;
+    background: linear-gradient(135deg, #ffffff 0%, #f0f8ff 100%);
+    box-shadow: 0 6px 20px rgba(42, 176, 240, 0.25);
+    transform: translateY(-2px);
+}
+
+/* ホバー状態 */
+#prefectureSelect:hover,
+#stationSelect:hover:not(:disabled) {
+    border-color: #2ab0f0;
+    background: linear-gradient(135deg, #ffffff 0%, #f0f8ff 100%);
+    box-shadow: 0 5px 16px rgba(42, 176, 240, 0.2);
+    transform: translateY(-1px);
+}
+
+.prefecture-select-container:hover::after,
+.station-select-container:hover::after {
+    border-top-color: #005baa;
+    transform: translateY(-50%) scale(1.1);
+}
