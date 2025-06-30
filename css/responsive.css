@@ -10,6 +10,21 @@
     }
 }
 
+/* FHD（1600px以上）- 3列チャートの最適化 */
+@media (min-width: 1600px) {
+    .container {
+        max-width: 1600px;
+    }
+    
+    .charts-grid {
+        gap: 40px;
+    }
+    
+    .chart-container {
+        height: 450px;
+    }
+}
+
 /* タブレット（768px以下）*/
 @media (max-width: 768px) {
     h1 {
