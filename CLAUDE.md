@@ -6,29 +6,35 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## プロジェクト概要
 
-気象庁データを使用して、日本の特定地点の今日の気温変化を表示するシンプルな天気可視化ウェブアプリケーションです。
+気象庁データを使用して、日本全国947箇所の観測所から今日の気温・湿度・気圧変化をリアルタイムで表示するWebアプリケーションです。
 
 ## アーキテクチャ
 
-**フロントエンドのみのアプリケーション** で、2つのメインファイルから構成されています：
+**モジュール化されたフロントエンドアプリケーション** で、ES6 modulesを使用した責任分離設計：
 
 - `index.html` - Chart.js統合を含むシングルページUI
-- `script.js` - ES6クラスベースのJavaScriptアプリケーション
+- `js/app.js` - メインアプリケーション統合
+- `js/cache.js` - TTLベースキャッシュシステム
+- `js/charts.js` - Chart.js可視化管理
+- `js/stations.js` - 観測所データ管理
+- `js/api.js` - 気象庁API連携
 
 **コアコンポーネント：**
 
-- `TemperatureApp`クラスがアプリケーション全体のライフサイクルを管理
-- Chart.js（CDN）による線グラフの可視化
-- バニラJavaScriptのfetch APIによるデータ取得
+- `WeatherApp`クラス：アプリケーション全体のライフサイクル管理
+- `WeatherCharts`クラス：3種類のチャート（気温・湿度・気圧）管理
+- `StationManager`クラス：観測所選択と2段階UI管理
+- `WeatherAPI`クラス：API効率化とバッチ取得
+- `WeatherDataCache`クラス：10分TTLキャッシュシステム
 
 ## データソース統合
 
 **JMA（気象庁）API：**
 
 - ベースURL: `https://www.jma.go.jp/bosai/amedas/data/map/{YYYYMMDDHHMISS}.json`
-- 対象観測所: `48361`
-- 位置: 長野県（観測所ID: 48361）
-- データ形式: 気温値は`data["48361"].temp[0]`
+- 対象観測所: 全国947箇所（四要素観測所・官署）
+- デフォルト観測所: 長野県松本（観測所ID: 48361）
+- データ形式: 3要素取得（気温・湿度・気圧）
 
 **APIレスポンス構造：**
 
@@ -36,8 +42,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 {
   "48361": {
     "temp": [26.7, 0],
-    "pressure": [938.1, 0],
-    // その他の気象データ...
+    "humidity": [65, 0],
+    "pressure": [938.1, 0]
   }
 }
 ```
@@ -52,10 +58,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **チャート設定：**
 
-- エリア塗りつぶしありの線グラフ
-- 600px高さのレスポンシブデザイン
-- Y軸はゼロから開始しない（beginAtZero: false）
-- 滑らかな曲線レンダリング（tension: 0.3）
+- 3要素の線グラフ（気温・湿度・気圧）
+- エリア塗りつぶし、滑らかな曲線（tension: 0.3）
+- 400px高さ、レスポンシブ3列グリッド（1024px以上）
+- 湿度のみ0-100%スケール、他はbeginAtZero: false
 
 ## 開発ワークフロー
 
@@ -83,11 +89,14 @@ npx serve .
 
 ## 主要ファイル構造
 
-- `script.js:55` - `WeatherApp`クラス: メインアプリケーションロジック
-- `script.js:1` - `WeatherDataCache`クラス: TTLベースキャッシュシステム
-- `script.js:181` - `loadStations()`: CSV観測所データ読み込み
-- `script.js:363` - `fetchWeatherData()`: 気象データAPI取得
-- `index.html:80` - UI要素とChart.js統合
+**モジュール化されたアーキテクチャ：**
+
+- `js/app.js:17` - `WeatherApp`クラス: メインアプリケーション統合
+- `js/cache.js:5` - `WeatherDataCache`クラス: TTLベースキャッシュシステム
+- `js/charts.js:7` - `WeatherCharts`クラス: 3種類のチャート管理
+- `js/stations.js:11` - `StationManager`クラス: 観測所データ・UI管理
+- `js/api.js:9` - `WeatherAPI`クラス: 気象庁API連携・バッチ取得
+- `index.html:574` - ES6 moduleローダーとUI要素
 
 ## キャッシュシステム
 
@@ -95,4 +104,11 @@ npx serve .
 
 ## CSVパース注意点
 
-観測所マスターファイル(`ame_master_20250313.csv`)は気温データのない「雨」「雪」観測所を除外(`script.js:207-209`)。
+観測所マスターファイル(`ame_master_20250313.csv`)は気温データのない「雨」「雪」観測所を除外(`js/stations.js:33-35`)。
+
+## モジュール設計原則
+
+- **単一責任原則**: 各クラスが明確な役割を持つ
+- **依存性注入**: コンストラクタでの依存関係管理
+- **ES6 modules**: import/exportによる明示的依存関係
+- **保守性**: 機能追加時の影響範囲を最小化
