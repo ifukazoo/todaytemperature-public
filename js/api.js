@@ -157,4 +157,78 @@ export class WeatherAPI {
         const requiredCacheCount = Math.min(3, currentHour + 1); // 3時間分または利用可能時間分
         return cacheCount >= requiredCacheCount;
     }
+
+    async getWeeklyTemperatureData(stationId) {
+        const allTemperatures = [];
+        const allLabels = [];
+        const today = new Date();
+        
+        // 過去7日間のデータを時間単位で取得（今日から7日前まで）
+        for (let daysAgo = 6; daysAgo >= 0; daysAgo--) {
+            const date = new Date(today);
+            date.setDate(today.getDate() - daysAgo);
+            
+            const dateString = `${date.getMonth() + 1}/${date.getDate()}`;
+            
+            // 1日24時間分のデータを取得
+            for (let hour = 0; hour < 24; hour++) {
+                try {
+                    const data = await this.fetchWeatherForHour(date, hour, stationId);
+                    const label = `${dateString} ${hour.toString().padStart(2, '0')}:00`;
+                    
+                    allTemperatures.push(data.temperature);
+                    allLabels.push(label);
+                } catch (error) {
+                    // エラーの場合はnullを追加
+                    const label = `${dateString} ${hour.toString().padStart(2, '0')}:00`;
+                    allTemperatures.push(null);
+                    allLabels.push(label);
+                    console.warn(`Failed to get data for ${date.toDateString()} ${hour}:00:`, error);
+                }
+            }
+        }
+        
+        return {
+            temperatures: allTemperatures,
+            labels: allLabels
+        };
+    }
+
+    async preloadWeeklyData() {
+        const loading = document.getElementById('loading');
+        const today = new Date();
+        const promises = [];
+        let completed = 0;
+        const total = 7 * 24; // 7日 × 24時間
+        
+        console.log('Starting weekly data preload...');
+        
+        // 過去7日間のデータを並列取得
+        for (let daysAgo = 6; daysAgo >= 0; daysAgo--) {
+            const date = new Date(today);
+            date.setDate(today.getDate() - daysAgo);
+            
+            for (let hour = 0; hour < 24; hour++) {
+                const promise = this.fetchAllStationsForHour(date, hour).then(() => {
+                    completed++;
+                    const progress = Math.round((completed / total) * 100);
+                    loading.textContent = `週間データを取得中... (${progress}%)`;
+                }).catch(() => {
+                    // エラーは無視してプログレスだけ更新
+                    completed++;
+                    const progress = Math.round((completed / total) * 100);
+                    loading.textContent = `週間データを取得中... (${progress}%)`;
+                });
+                promises.push(promise);
+            }
+        }
+        
+        try {
+            await Promise.allSettled(promises);
+            loading.textContent = 'データ処理中...';
+            console.log('Weekly data preload completed');
+        } catch (error) {
+            console.warn('Some weekly data failed to preload:', error);
+        }
+    }
 }

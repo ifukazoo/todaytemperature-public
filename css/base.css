@@ -117,3 +117,52 @@ h1 {
     border: 1px solid #ffcdd2;
     box-shadow: 0 2px 10px rgba(231, 76, 60, 0.1);
 }
+
+/* モード選択 */
+.mode-selector {
+    text-align: center;
+    margin: 30px 0;
+    padding: 20px 0;
+    border-bottom: 1px solid #edf2f9;
+}
+
+.mode-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.mode-button {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
+    border: 2px solid #e1e8ed;
+    border-radius: 12px;
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #2c3e50;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.mode-button:hover {
+    border-color: #2ab0f0;
+    background: linear-gradient(135deg, #ffffff 0%, #f0f8ff 100%);
+    box-shadow: 0 4px 16px rgba(42, 176, 240, 0.15);
+    transform: translateY(-1px);
+}
+
+.mode-button.active {
+    background: linear-gradient(135deg, #2ab0f0 0%, #005baa 100%);
+    border-color: #005baa;
+    color: white;
+    box-shadow: 0 4px 16px rgba(42, 176, 240, 0.3);
+}
+
+.mode-button.active:hover {
+    background: linear-gradient(135deg, #005baa 0%, #003d7a 100%);
+    transform: translateY(-1px);
+}

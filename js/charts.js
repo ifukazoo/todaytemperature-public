@@ -7,12 +7,14 @@ export class WeatherCharts {
         this.temperatureChart = null;
         this.pressureChart = null;
         this.humidityChart = null;
+        this.weeklyTemperatureChart = null;
     }
 
     initCharts() {
         this.initTemperatureChart();
         this.initHumidityChart();
         this.initPressureChart();
+        this.initWeeklyTemperatureChart();
     }
 
     initTemperatureChart() {
@@ -183,5 +185,119 @@ export class WeatherCharts {
         this.pressureChart.data.datasets[0].data = pressures;
         this.pressureChart.options.plugins.title.text = `${stationName} - 今日の気圧変化`;
         this.pressureChart.update();
+    }
+
+    initWeeklyTemperatureChart() {
+        const ctx = document.getElementById('weeklyTemperatureChart').getContext('2d');
+        this.weeklyTemperatureChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: '気温 (°C)',
+                    data: [],
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.3,
+                    pointRadius: 0,
+                    pointHoverRadius: 4,
+                    pointBackgroundColor: 'rgba(255, 99, 132, 1)',
+                    pointBorderColor: 'rgba(255, 255, 255, 0.8)',
+                    pointBorderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        title: {
+                            display: true,
+                            text: '気温 (°C)',
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0,0,0,0.1)'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: '日時',
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0,0,0,0.1)'
+                        },
+                        ticks: {
+                            maxTicksLimit: 20,
+                            callback: function(value, index, values) {
+                                const label = this.getLabelForValue(value);
+                                // 日付が変わる0時のみ表示
+                                if (label && label.includes('00:00')) {
+                                    return label.split(' ')[0]; // 日付部分のみ
+                                }
+                                return '';
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: '過去7日間の気温変化',
+                        font: {
+                            size: 16,
+                            weight: 'bold'
+                        }
+                    },
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            usePointStyle: true,
+                            padding: 20,
+                            font: {
+                                size: 12
+                            }
+                        }
+                    },
+                    tooltip: {
+                        mode: 'nearest',
+                        intersect: false,
+                        backgroundColor: 'rgba(0,0,0,0.8)',
+                        titleColor: 'white',
+                        bodyColor: 'white',
+                        borderColor: 'rgba(255,255,255,0.2)',
+                        borderWidth: 1,
+                        callbacks: {
+                            title: function(tooltipItems) {
+                                return tooltipItems[0].label;
+                            }
+                        }
+                    }
+                },
+                interaction: {
+                    mode: 'nearest',
+                    intersect: false
+                }
+            }
+        });
+    }
+
+    updateWeeklyTemperatureChart(weeklyData, stationName) {
+        this.weeklyTemperatureChart.data.labels = weeklyData.labels;
+        this.weeklyTemperatureChart.data.datasets[0].data = weeklyData.temperatures;
+        this.weeklyTemperatureChart.options.plugins.title.text = `${stationName} - 過去7日間の気温変化`;
+        this.weeklyTemperatureChart.update();
     }
 }

@@ -41,15 +41,28 @@
                 </div>
             </div>
             
+            <!-- 表示モード選択 -->
+            <div class="mode-selector">
+                <div class="mode-buttons">
+                    <button id="todayMode" class="mode-button active">
+                        📅 当日の変化
+                    </button>
+                    <button id="weeklyMode" class="mode-button">
+                        📊 過去1週間
+                    </button>
+                </div>
+            </div>
+            
             <div id="loading" class="loading" style="display: none;">
                 データを取得中...
             </div>
             
             <div id="error" class="error" style="display: none;"></div>
             
-            <div class="charts-section">
+            <!-- 当日の変化チャート -->
+            <div class="charts-section" id="todayCharts">
                 <div class="charts-header">
-                    <h2 class="charts-title">📊 気象データ表示</h2>
+                    <h2 class="charts-title">📊 今日の気象データ変化</h2>
                     <button class="charts-refresh-button" id="refreshCharts" title="最新データに更新">
                         🔄 データを更新
                     </button>
@@ -92,6 +105,31 @@
                         </div>
                         <div class="chart-container">
                             <canvas id="pressureChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 過去1週間の気温チャート -->
+            <div class="charts-section" id="weeklyCharts" style="display: none;">
+                <div class="charts-header">
+                    <h2 class="charts-title">📊 過去1週間の気温変化</h2>
+                    <button class="charts-refresh-button" id="refreshWeeklyCharts" title="最新データに更新">
+                        🔄 データを更新
+                    </button>
+                </div>
+                
+                <div class="weekly-charts-grid">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3 class="chart-title">
+                                <div class="chart-icon temperature">🌡️</div>
+                                過去7日間の気温変化（時間単位）
+                            </h3>
+                            <div class="chart-meta">単位: °C</div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="weeklyTemperatureChart"></canvas>
                         </div>
                     </div>
                 </div>
