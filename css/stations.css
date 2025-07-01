@@ -6,7 +6,7 @@
 /* 観測所選択セクション */
 .station-selector {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     position: relative;
 }
 
@@ -14,30 +14,30 @@
     display: block;
     font-weight: 600;
     color: #2c3e50;
-    margin-bottom: 16px;
-    font-size: 1.1rem;
+    margin-bottom: 12px;
+    font-size: 1rem;
 }
 
-/* 選択コンテナ */
+/* 選択コンテナ - 1行配置 */
 .prefecture-select-container,
 .station-select-container {
     position: relative;
     display: inline-block;
-    min-width: 320px;
-    margin-bottom: 16px;
+    min-width: 280px;
+    margin: 0 8px 8px 8px;
 }
 
 /* セレクトボックス共通スタイル */
 #prefectureSelect,
 #stationSelect {
-    padding: 16px 50px 16px 50px;
-    font-size: 16px;
+    padding: 12px 45px 12px 45px;
+    font-size: 14px;
     border: 2px solid #e1e8ed;
-    border-radius: 12px;
+    border-radius: 10px;
     background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
     color: #2c3e50;
     width: 100%;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
     transition: all 0.3s ease;
     font-weight: 500;
     cursor: pointer;
