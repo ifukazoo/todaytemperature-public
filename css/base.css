@@ -150,15 +150,15 @@ h1 {
 .mode-buttons {
     display: flex;
     justify-content: center;
-    gap: 12px;
+    gap: 16px;
 }
 
 .mode-button {
     background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
     border: 2px solid #e1e8ed;
     border-radius: 12px;
-    padding: 12px 24px;
-    font-size: 14px;
+    padding: 14px 28px;
+    font-size: 15px;
     font-weight: 600;
     color: #2c3e50;
     cursor: pointer;
@@ -166,7 +166,9 @@ h1 {
     display: flex;
     align-items: center;
     gap: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    min-width: 140px;
+    justify-content: center;
 }
 
 .mode-button:hover {
@@ -180,7 +182,8 @@ h1 {
     background: linear-gradient(135deg, #2ab0f0 0%, #005baa 100%);
     border-color: #005baa;
     color: white;
-    box-shadow: 0 4px 16px rgba(42, 176, 240, 0.3);
+    box-shadow: 0 6px 20px rgba(42, 176, 240, 0.4);
+    transform: translateY(-1px);
 }
 
 .mode-button.active:hover {
