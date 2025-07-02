@@ -235,18 +235,37 @@ export class WeatherCharts {
                                 weight: 'bold'
                             }
                         },
-                        grid: {
-                            color: 'rgba(0,0,0,0.1)'
-                        },
                         ticks: {
-                            maxTicksLimit: 20,
                             callback: function(value, index, values) {
                                 const label = this.getLabelForValue(value);
-                                // 日付が変わる0時のみ表示
+                                // 00:00のみ表示（日付部分）
                                 if (label && label.includes('00:00')) {
                                     return label.split(' ')[0]; // 日付部分のみ
                                 }
                                 return '';
+                            },
+                            filter: function(value, index, values) {
+                                const label = this.getLabelForValue(value);
+                                // 00:00のみ表示
+                                return label && label.includes('00:00');
+                            }
+                        },
+                        grid: {
+                            color: function(context) {
+                                const label = context.chart.data.labels[context.index];
+                                // 00:00のグリッドのみ表示
+                                if (label && label.includes('00:00')) {
+                                    return 'rgba(0,0,0,0.3)';
+                                }
+                                return 'transparent';
+                            },
+                            lineWidth: function(context) {
+                                const label = context.chart.data.labels[context.index];
+                                // 00:00のグリッドのみ表示
+                                if (label && label.includes('00:00')) {
+                                    return 1;
+                                }
+                                return 0;
                             }
                         }
                     }
