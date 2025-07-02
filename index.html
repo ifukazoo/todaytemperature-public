@@ -23,33 +23,35 @@
     
     <div class="container">
         <div class="main-content">
-            <div class="station-selector">
-                <label>観測所を選択：</label>
-                
-                <!-- 都道府県選択 -->
-                <div class="prefecture-select-container">
-                    <select id="prefectureSelect">
-                        <option value="">都道府県を選択してください</option>
-                    </select>
+            <div class="selector-and-mode">
+                <div class="station-selector">
+                    <label>観測所を選択：</label>
+                    
+                    <!-- 都道府県選択 -->
+                    <div class="prefecture-select-container">
+                        <select id="prefectureSelect">
+                            <option value="">都道府県を選択してください</option>
+                        </select>
+                    </div>
+                    
+                    <!-- 観測所選択 -->
+                    <div class="station-select-container">
+                        <select id="stationSelect" disabled>
+                            <option value="">観測所を選択してください</option>
+                        </select>
+                    </div>
                 </div>
                 
-                <!-- 観測所選択 -->
-                <div class="station-select-container">
-                    <select id="stationSelect" disabled>
-                        <option value="">観測所を選択してください</option>
-                    </select>
-                </div>
-            </div>
-            
-            <!-- 表示モード選択 -->
-            <div class="mode-selector">
-                <div class="mode-buttons">
-                    <button id="todayMode" class="mode-button active">
-                        📅 当日の変化
-                    </button>
-                    <button id="weeklyMode" class="mode-button">
-                        📊 過去1週間
-                    </button>
+                <!-- 表示モード選択 -->
+                <div class="mode-selector">
+                    <div class="mode-buttons">
+                        <button id="todayMode" class="mode-button active">
+                            📅 当日の変化
+                        </button>
+                        <button id="weeklyMode" class="mode-button">
+                            📊 過去1週間
+                        </button>
+                    </div>
                 </div>
             </div>
             

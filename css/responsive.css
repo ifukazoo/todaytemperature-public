@@ -25,6 +25,7 @@
     }
 }
 
+
 /* タブレット（768px以下）*/
 @media (max-width: 768px) {
     h1 {
@@ -65,6 +66,24 @@
     
     .hero-subtitle br {
         display: none;
+    }
+    
+    /* モバイルでは縦並びレイアウトに変更 */
+    .selector-and-mode {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .station-selector {
+        text-align: center;
+    }
+    
+    .mode-selector {
+        text-align: center;
+    }
+    
+    .mode-selector .mode-buttons {
+        margin-top: 0;
     }
     
     /* 観測所選択UI調整 */
