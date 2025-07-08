@@ -273,7 +273,7 @@ export class WeatherCharts {
                 plugins: {
                     title: {
                         display: true,
-                        text: '過去7日間の気温変化',
+                        text: '過去10日間の気温変化',
                         font: {
                             size: 16,
                             weight: 'bold'
@@ -316,7 +316,7 @@ export class WeatherCharts {
     updateWeeklyTemperatureChart(weeklyData, stationName) {
         this.weeklyTemperatureChart.data.labels = weeklyData.labels;
         this.weeklyTemperatureChart.data.datasets[0].data = weeklyData.temperatures;
-        this.weeklyTemperatureChart.options.plugins.title.text = `${stationName} - 過去7日間の気温変化`;
+        this.weeklyTemperatureChart.options.plugins.title.text = `${stationName} - 過去10日間の気温変化`;
         this.weeklyTemperatureChart.update();
     }
 }

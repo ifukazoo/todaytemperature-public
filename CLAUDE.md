@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## プロジェクト概要
 
-気象庁データを使用して、日本全国947箇所の観測所から今日の気温・湿度・気圧変化と過去1週間の気温変化を表示するWebアプリケーションです。
+気象庁データを使用して、日本全国947箇所の観測所から今日の気温・湿度・気圧変化と過去10日間の気温変化を表示するWebアプリケーションです。
 
 ## アーキテクチャ
 
@@ -15,16 +15,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `index.html` - Chart.js統合を含むシングルページUI
 - `js/app.js` - メインアプリケーション統合
 - `js/cache.js` - TTLベースキャッシュシステム
-- `js/charts.js` - Chart.js可視化管理（当日3要素+週間気温）
+- `js/charts.js` - Chart.js可視化管理（当日3要素+10日間気温）
 - `js/stations.js` - 観測所データ管理
 - `js/api.js` - 気象庁API連携
 
 **コアコンポーネント：**
 
 - `WeatherApp`クラス：アプリケーション全体のライフサイクル管理（モード切り替え対応）
-- `WeatherCharts`クラス：4種類のチャート管理（当日3要素+週間気温）
+- `WeatherCharts`クラス：4種類のチャート管理（当日3要素+10日間気温）
 - `StationManager`クラス：観測所選択と2段階UI管理
-- `WeatherAPI`クラス：API効率化とバッチ取得（当日+週間データ対応）
+- `WeatherAPI`クラス：API効率化とバッチ取得（当日+10日間データ対応）
 - `WeatherDataCache`クラス：10分TTLキャッシュシステム
 
 ## データソース統合

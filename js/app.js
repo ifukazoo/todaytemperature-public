@@ -89,7 +89,7 @@ export class WeatherApp {
                 await this.fetchWeatherData();
             }
         } else if (this.currentMode === 'weekly') {
-            // 週間モード: 週間データを取得
+            // 10日間モード: 10日間データを取得
             console.log('Auto-fetching weekly data for station change');
             await this.fetchWeeklyData();
         }
@@ -175,7 +175,7 @@ export class WeatherApp {
         document.getElementById('todayCharts').style.display = 'none';
         document.getElementById('weeklyCharts').style.display = 'block';
         
-        // 選択されている観測所があれば週間データを取得・表示
+        // 選択されている観測所があれだ10日間データを取得・表示
         const selectedStationId = this.stationManager.getSelectedStationId();
         if (selectedStationId) {
             this.fetchWeeklyData();
@@ -208,15 +208,15 @@ export class WeatherApp {
         error.style.display = 'none';
         
         try {
-            // 週間データをバッチで取得
+            // 10日間データをバッチで取得
             await this.api.preloadWeeklyData();
             
-            // 週間気温データを取得・表示
+            // 10日間気温データを取得・表示
             const weeklyData = await this.api.getWeeklyTemperatureData(selectedStationId);
             this.updateWeeklyCharts(weeklyData, selectedStationId);
         } catch (err) {
             console.error('Error fetching weekly data:', err);
-            error.textContent = '週間データの取得に失敗しました。しばらく待ってから再試行してください。';
+            error.textContent = '10日間データの取得に失敗しました。しばらく待ってから再試行してください。';
             error.style.display = 'block';
         } finally {
             // リフレッシュボタンを再有効化

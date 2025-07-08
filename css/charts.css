@@ -159,7 +159,7 @@
     width: 100%;
 }
 
-/* 週間チャート専用スタイル */
+/* 10日間チャート専用スタイル */
 .weekly-charts-grid {
     display: grid;
     grid-template-columns: 1fr;

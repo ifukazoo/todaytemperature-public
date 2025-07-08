@@ -163,8 +163,8 @@ export class WeatherAPI {
         const allLabels = [];
         const today = new Date();
         
-        // 過去7日間のデータを時間単位で取得（今日から7日前まで）
-        for (let daysAgo = 6; daysAgo >= 0; daysAgo--) {
+        // 過去10日間のデータを時間単位で取得（今日から10日前まで）
+        for (let daysAgo = 9; daysAgo >= 0; daysAgo--) {
             const date = new Date(today);
             date.setDate(today.getDate() - daysAgo);
             
@@ -199,12 +199,12 @@ export class WeatherAPI {
         const today = new Date();
         const promises = [];
         let completed = 0;
-        const total = 7 * 24; // 7日 × 24時間
+        const total = 10 * 24; // 10日 × 24時間
         
         console.log('Starting weekly data preload...');
         
-        // 過去7日間のデータを並列取得
-        for (let daysAgo = 6; daysAgo >= 0; daysAgo--) {
+        // 過去10日間のデータを並列取得
+        for (let daysAgo = 9; daysAgo >= 0; daysAgo--) {
             const date = new Date(today);
             date.setDate(today.getDate() - daysAgo);
             
@@ -212,12 +212,12 @@ export class WeatherAPI {
                 const promise = this.fetchAllStationsForHour(date, hour).then(() => {
                     completed++;
                     const progress = Math.round((completed / total) * 100);
-                    loading.textContent = `週間データを取得中... (${progress}%)`;
+                    loading.textContent = `10日間データを取得中... (${progress}%)`;
                 }).catch(() => {
                     // エラーは無視してプログレスだけ更新
                     completed++;
                     const progress = Math.round((completed / total) * 100);
-                    loading.textContent = `週間データを取得中... (${progress}%)`;
+                    loading.textContent = `10日間データを取得中... (${progress}%)`;
                 });
                 promises.push(promise);
             }
